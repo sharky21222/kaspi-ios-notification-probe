@@ -76,7 +76,8 @@ targets:
     templates: [probeExtension]
     sources: [Extensions/DataProvider]
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: site.shrks.kaspiprobe.access.data
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: site.shrks.kaspiprobe.access.data
     entitlements:
       path: build/ProbeDataProvider.entitlements
       properties:
@@ -90,7 +91,8 @@ targets:
     templates: [probeExtension]
     sources: [Extensions/Security]
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: site.shrks.kaspiprobe.access.security
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: site.shrks.kaspiprobe.access.security
     entitlements:
       path: build/ProbeSecurity.entitlements
       properties:
@@ -103,7 +105,8 @@ targets:
     templates: [probeExtension]
     sources: [Extensions/Transport]
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: site.shrks.kaspiprobe.access.transport
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: site.shrks.kaspiprobe.access.transport
     entitlements:
       path: build/ProbeTransport.entitlements
       properties:

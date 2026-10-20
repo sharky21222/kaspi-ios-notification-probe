@@ -2,6 +2,9 @@
 set -euo pipefail
 command -v xcodegen >/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install xcodegen
 xcodegen generate
+xcodebuild -project KaspiProbe.xcodeproj -alltargets -sdk iphoneos \
+  -showBuildSettings -json > build/access-settings.json
+python3 scripts/check_project_settings.py build/access-settings.json
 swiftc SignatureCore/SignatureAudit.swift Tests/main.swift -o /tmp/probe-signature-tests
 /tmp/probe-signature-tests
 python3 -m unittest discover -s Tests -p 'test_*.py' -v
