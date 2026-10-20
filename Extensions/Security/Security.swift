@@ -16,5 +16,5 @@ final class SecurityProbeHandler: AccessorySecuritySession.EventHandler {
         // No fake key exchange: a capability check must not claim a working transport.
         completion(.failure(.transportUnavailable))
     }
-    func sessionInvalidated(error: (any Error)?) {}
+    func sessionInvalidated(error: AccessorySecuritySession.Error?) {}
 }
