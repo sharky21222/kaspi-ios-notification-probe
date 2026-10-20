@@ -4,9 +4,14 @@ Isolated, zero-subscription-cost experiment for iOS 26.5 or later. This reposito
 contains no KaspiDonate source, payment details, credentials, phone database,
 donation history, or Apple account data.
 
-Status: source prepared; iPhone packages have not yet been compiled or tested
-on a real device. The Windows synthetic receiver tests and a short BLE
-advertising/cleanup check have passed. Do not treat this as a validated iOS app.
+Status: both arm64 iPhone packages compiled with Xcode 27.0 on 2026-10-21
+(source commit `bcf6d2b`). All three capability extensions are included. The
+basic app launched in the simulator; bundle-ID preflight, Swift signature-parser
+checks, and eight Python tests passed. Downloaded IPA hashes, ZIP integrity,
+executables, and bundle metadata were verified. The Windows synthetic receiver
+and a short BLE advertising/cleanup check have also passed. Free-account signing,
+installation, entitlements, and notification reception on a real iPhone remain
+UNVERIFIED. Do not treat this as a validated bank notification bridge.
 
 **This is not a working bank notification bridge.** The first gate is whether
 the phone accepts a free re-sign and retains the required extension entitlements.
