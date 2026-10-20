@@ -40,6 +40,14 @@ targetTemplates:
         SKIP_INSTALL: YES
     info:
       path: build/${target_name}-Info.plist
+      properties:
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: XPC!
+        CFBundleInfoDictionaryVersion: '6.0'
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
 targets:
   InstallProbe:
     templates: [probeApp]

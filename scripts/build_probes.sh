@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-command -v xcodegen >/dev/null || brew install xcodegen
+command -v xcodegen >/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install xcodegen
 xcodegen generate
 swiftc SignatureCore/SignatureAudit.swift Tests/main.swift -o /tmp/probe-signature-tests
 /tmp/probe-signature-tests
