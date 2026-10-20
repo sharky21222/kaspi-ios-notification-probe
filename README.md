@@ -10,8 +10,31 @@ basic app launched in the simulator; bundle-ID preflight, Swift signature-parser
 checks, and eight Python tests passed. Downloaded IPA hashes, ZIP integrity,
 executables, and bundle metadata were verified. The Windows synthetic receiver
 and a short BLE advertising/cleanup check have also passed. Free-account signing,
-installation, entitlements, and notification reception on a real iPhone remain
-UNVERIFIED. Do not treat this as a validated bank notification bridge.
+installation, entitlements, and notification reception on a real iPhone were
+initially unverified. See the real-device results below. Do not treat this as a
+validated bank notification bridge.
+
+## Real-device results (2026-10-21)
+
+- The basic Install Probe was installed using a free Apple account and opened
+  on iOS 27.0.1. Its authenticated synthetic LAN request reached the Windows
+  receiver and returned successfully. The temporary receiver was then stopped.
+- Access Probe installation through Sideloadly 0.71.1 failed because iOS reported
+  that `ProbeTransport.appex` lacked the Boolean entitlement
+  `com.apple.developer.accessory-transport-extension` after re-signing.
+- A binary-signature audit of the original downloaded IPA and Sideloadly's
+  cached source IPA confirmed that each of the three extensions originally had
+  its correct entitlement set to Boolean `true`. Both source IPA hashes matched
+  the build manifest. The post-sign package/profile has not been obtained, so
+  this does not establish whether Apple's profile supports these capabilities.
+- Sideloadly's official changelog restricts its custom-entitlements feature to
+  Apple Developer Program accounts and Patreon subscribers. No paid option was
+  enabled, extensions were not removed, and no signing restrictions were bypassed.
+- Notification access and bank notification reception remain UNVERIFIED. An
+  unchanged Retry is not a successful test. Do not describe either IPA as a
+  working bank notification bridge or assume payment would resolve the issue.
+
+Signing-tool reference: <https://sideloadly.io/changelog>
 
 **This is not a working bank notification bridge.** The first gate is whether
 the phone accepts a free re-sign and retains the required extension entitlements.
