@@ -1,0 +1,57 @@
+name: Build free-install probes
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Select installed SDK
+        run: |
+          set -euo pipefail
+          python3 scripts/select_xcode.py
+          xcodebuild -version
+          xcodebuild -showsdks
+      - name: Generate isolated Xcode project
+        run: |
+          set -euo pipefail
+          command -v xcodegen >/dev/null || brew install xcodegen
+          xcodegen generate
+      - name: Test signature parser
+        run: |
+          swiftc SignatureCore/SignatureAudit.swift Tests/main.swift -o /tmp/probe-signature-tests
+          /tmp/probe-signature-tests
+          python3 -m unittest discover -s Tests -p 'test_*.py' -v
+      - name: Build iPhone packages without Apple credentials
+        run: |
+          set -euo pipefail
+          for scheme in InstallProbe AccessProbe; do
+            xcodebuild -project KaspiProbe.xcodeproj -scheme "$scheme" -configuration Release \
+              -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build/device \
+              CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO ARCHS=arm64 build > "build-${scheme}.log" 2>&1 || {
+                tail -n 140 "build-${scheme}.log"; exit 1;
+              }
+            tail -n 3 "build-${scheme}.log"
+          done
+          python3 scripts/package_ipa.py
+      - name: Build and capture installation-probe simulator
+        run: |
+          set -euo pipefail
+          xcodebuild -project KaspiProbe.xcodeproj -scheme InstallProbe -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/simulator \
+            CODE_SIGNING_ALLOWED=NO build > build-simulator.log 2>&1 || {
+              tail -n 100 build-simulator.log; exit 1;
+            }
+          python3 scripts/simulator_capture.py
+      - name: Publish probe files only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="probe-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          gh release create "$tag" output/*.ipa output/manifest.json output/install-probe.png \
+            --target "$GITHUB_SHA" --prerelease --title "Installation and capability probes" \
+            --notes "Re-sign with your own Apple account. No Apple certificate included. This is NOT a working bank-notification bridge. Read README before installing."

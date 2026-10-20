@@ -1,0 +1,13 @@
+build/
+output/
+*.xcodeproj/
+*.xcworkspace/
+.DS_Store
+__pycache__/
+*.pyc
+.runtime.json
+*.mobileprovision
+*.p12
+*.p8
+*.cer
+*.ipa

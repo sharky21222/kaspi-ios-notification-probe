@@ -1,0 +1,97 @@
+# Kaspi iPhone Probe
+
+Isolated, zero-subscription-cost experiment for iOS 26.5 or later. This repository
+contains no KaspiDonate source, payment details, credentials, phone database,
+donation history, or Apple account data.
+
+**This is not a working bank notification bridge.** The first gate is whether
+the phone accepts a free re-sign and retains the required extension entitlements.
+A successful installation or permission prompt does NOT prove notification
+receipt, background reliability, encrypted transport, or compatibility with
+production donation alerts.
+
+## Packages
+
+- `Kaspi-Install-Probe.ipa`: basic install and synthetic local-network test.
+- `Kaspi-Access-Probe.ipa`: the same app with all three required accessory
+  extensions and their requested entitlement keys.
+
+Packages are ad-hoc signed only to preserve the requested entitlement metadata
+for the installer. They contain **no Apple certificate or provisioning profile**
+and require re-signing with the user's own Apple account. The access probe may
+fail signing or installation if the account cannot obtain these capabilities.
+Do not strip extensions to turn such a failure into an apparent success.
+
+The security and transport handlers deliberately report transport unavailable.
+No fake key exchange, plaintext bank forwarding, or false success is provided.
+The notification handler never reads notification content or changes donations.
+
+## Free installation on Windows
+
+1. Download Sideloadly only from <https://sideloadly.io/>.
+2. Connect the unlocked iPhone by USB. Complete device trust and Developer Mode
+   prompts yourself, if needed. Never send account passwords or 2FA codes in chat.
+3. Install the **Install Probe first**, using your own free Apple account.
+4. If it launches, try the **Access Probe** without removing its extensions.
+5. Keep the exact signing/installation error if it fails. If it launches, use
+   `Отчёт проверки` to share the diagnostic report. Reports exclude pairing keys,
+   IP addresses, account credentials, bank messages and donor names.
+
+Free personal provisioning normally expires after seven days and has device,
+App ID, and installed-app limits. Automatic refresh is an installer feature;
+it does not grant additional iOS entitlements.
+
+Do not uninstall existing Apple drivers or modify Phone Link just for this test.
+If the installer requests driver changes, stop and check the requirement first.
+
+## Windows connectivity and accessory test
+
+No installed service, autostart, firewall change, or production API is created.
+The receiver accepts only authenticated synthetic pings for up to 15 minutes.
+It never accepts bank text or donation events. It binds port 5127 on the chosen
+private network interface, not the KaspiDonate server port.
+
+```powershell
+python windows/receiver.py --host YOUR_PRIVATE_PC_IPV4
+```
+
+Enter the displayed IPv4 address and temporary key into the phone app. A phone
+response means only that this synthetic network request worked. Keep the key
+private; it expires when the receiver closes.
+
+For the system accessory picker, optionally publish a separate read-only BLE
+service, using Python 3.12+ with the dependencies in `windows/requirements.txt`:
+
+```powershell
+python windows/receiver.py --host YOUR_PRIVATE_PC_IPV4 --advertise
+```
+
+This does not pair the phone, authorize notifications, enable Bluetooth, reset
+the adapter, or stop another application's connection. Complete any operating
+system consent yourself. Stop with Ctrl+C; no startup entry remains.
+
+## Build and test
+
+The manual GitHub Actions workflow uses only a **standard public-repository
+macOS runner**, which GitHub documents as free. It never uses paid/larger
+runners, Apple account secrets, private-repository minutes, or artifact storage.
+Outputs are attached to a GitHub pre-release.
+
+```sh
+xcodegen generate
+xcodebuild -project KaspiProbe.xcodeproj -scheme InstallProbe -sdk iphoneos CODE_SIGNING_ALLOWED=NO build
+python3 -m unittest discover -s Tests -p 'test_*.py' -v
+```
+
+## Official References
+
+- Apple Accessory Notifications: <https://developer.apple.com/documentation/accessorynotifications>
+- Required extensions: <https://developer.apple.com/documentation/accessorytransportextension/receiving-ios-notifications-on-an-accessory>
+- Local-network transport: <https://developer.apple.com/documentation/accessorytransportextension/accessorytransport/localnetwork>
+- Free personal provisioning: <https://developer.apple.com/help/account/basics/about-your-developer-account>
+- GitHub public runner pricing: <https://docs.github.com/en/actions/reference/runners/github-hosted-runners>
+- Sideloadly FAQ: <https://sideloadly.io/faq>
+
+Developer testing outside the EU and customer availability are different:
+Apple permits development/testing in any region, but restricts customer use
+of the framework to eligible EU devices/accounts. No regional bypass is provided.
