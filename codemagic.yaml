@@ -1,0 +1,15 @@
+workflows:
+  probe-ios:
+    name: Installation and capability probes
+    instance_type: mac_mini_m2
+    max_build_duration: 20
+    environment:
+      xcode: '27.0'
+    scripts:
+      - name: Build, test, and package without Apple credentials
+        script: bash scripts/build_probes.sh
+    artifacts:
+      - output/*.ipa
+      - output/manifest.json
+      - output/install-probe.png
+      - build-*.log

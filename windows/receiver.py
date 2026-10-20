@@ -105,13 +105,16 @@ async def advertise(stop):
     options = GattServiceProviderAdvertisingParameters()
     options.is_connectable = True
     options.is_discoverable = True
+    started = False
     try:
-        provider.start_advertising(options)
+        provider.start_advertising_with_parameters(options)
+        started = True
         print('BLE capability-test accessory is discoverable. No notification transport is implemented.', flush=True)
         while not stop.is_set():
             await asyncio.sleep(.25)
     finally:
-        provider.stop_advertising()
+        if started:
+            provider.stop_advertising()
 
 
 def main():

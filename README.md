@@ -4,6 +4,10 @@ Isolated, zero-subscription-cost experiment for iOS 26.5 or later. This reposito
 contains no KaspiDonate source, payment details, credentials, phone database,
 donation history, or Apple account data.
 
+Status: source prepared; iPhone packages have not yet been compiled or tested
+on a real device. The Windows synthetic receiver tests and a short BLE
+advertising/cleanup check have passed. Do not treat this as a validated iOS app.
+
 **This is not a working bank notification bridge.** The first gate is whether
 the phone accepts a free re-sign and retains the required extension entitlements.
 A successful installation or permission prompt does NOT prove notification
@@ -76,6 +80,17 @@ The manual GitHub Actions workflow uses only a **standard public-repository
 macOS runner**, which GitHub documents as free. It never uses paid/larger
 runners, Apple account secrets, private-repository minutes, or artifact storage.
 Outputs are attached to a GitHub pre-release.
+
+If GitHub Actions is unavailable, `codemagic.yaml` supports a **personal Free**
+Codemagic account using the included macOS M2 minutes. Builds are manual, capped
+at 20 minutes, and require no Apple signing assets. Do not enable billing,
+choose a paid/team plan, use an M4 instance, or start without sufficient free
+M2 minutes remaining. Grant repository access only to this isolated project.
+Codemagic stores the generated test artifacts within its included plan storage.
+
+On Codemagic, add this repository as a native iOS app, select `codemagic.yaml`
+from branch `main`, then run workflow `probe-ios`. It is a build-for-re-signing
+workflow, not App Store/TestFlight distribution.
 
 ```sh
 xcodegen generate

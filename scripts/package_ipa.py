@@ -10,7 +10,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'output'
 OUTPUT.mkdir(exist_ok=True)
-manifest = {'commit': os.environ.get('GITHUB_SHA', ''), 'apple_signed': False,
+manifest = {'commit': os.environ.get('GITHUB_SHA', os.environ.get('CM_COMMIT', '')), 'apple_signed': False,
             'bank_reception_verified': False, 'packages': []}
 for name, filename in [('InstallProbe', 'Kaspi-Install-Probe.ipa'), ('AccessProbe', 'Kaspi-Access-Probe.ipa')]:
     source = ROOT / 'build/device/Build/Products/Release-iphoneos' / (name + '.app')
