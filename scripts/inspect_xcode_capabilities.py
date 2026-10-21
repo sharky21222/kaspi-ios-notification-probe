@@ -14,6 +14,12 @@ NEEDLES = (
 
 def matching_records(value, path=()):
     if isinstance(value, dict):
+        attributes = value.get("attributes")
+        if "id" in value and isinstance(attributes, dict) and "entitlements" in attributes:
+            entitlement_text = json.dumps(attributes["entitlements"], default=str)
+            if any(needle in entitlement_text for needle in NEEDLES):
+                yield {"key_path": list(path), "definition": value}
+                return
         scalar_matches = any(
             any(needle in str(key) or (isinstance(item, str) and needle in item)
                 for needle in NEEDLES)

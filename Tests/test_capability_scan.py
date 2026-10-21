@@ -9,6 +9,14 @@ SPEC.loader.exec_module(SCAN)
 
 
 class CapabilityScanTests(unittest.TestCase):
+    def test_keeps_capability_identifier_and_eligibility_conditions(self):
+        capability = {"id": "EXAMPLE_ACCESSORY", "type": "capabilities", "attributes": {
+            "supportedSDKs": ["ios"], "entitlements": [
+                {"profileKey": "com.apple.developer.accessory-data-provider", "isRequiredInPlist": True}]}}
+        records = list(SCAN.matching_records({"data": [capability]}))
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["definition"], capability)
+
     def test_preserves_signing_rules_for_a_matching_entitlement(self):
         metadata = {"items": [{"Entitlement": "com.apple.developer.accessory-data-provider",
                                "RequiresProfile": False, "Supported": True}]}
