@@ -30,14 +30,21 @@ validated bank notification bridge.
 - Sideloadly's official changelog restricts its custom-entitlements feature to
   Apple Developer Program accounts and Patreon subscribers. No paid option was
   enabled, extensions were not removed, and no signing restrictions were bypassed.
+- The separate ExtensionKit-aware Windows signer obtained a signing identity and
+  profiles, then stopped before signing because the data-provider profile did not
+  grant its required Boolean entitlement. The Access Probe was not installed.
+- A subsequent audit of Apple's Xcode 27.0 (27A266a) portal capability registry
+  found that all three accessory capabilities require a profile entry and list
+  only Developer Program / Enterprise Program as valid team types, not free
+  Personal Team. See [the dated evidence](docs/accessory-capability-findings.md).
 - Notification access and bank notification reception remain UNVERIFIED. An
   unchanged Retry is not a successful test. Do not describe either IPA as a
   working bank notification bridge or assume payment would resolve the issue.
 
 Signing-tool reference: <https://sideloadly.io/changelog>
 
-**This is not a working bank notification bridge.** The first gate is whether
-the phone accepts a free re-sign and retains the required extension entitlements.
+**This is not a working bank notification bridge.** The current supported free
+Personal Team path is blocked by Apple's accessory capability eligibility rules.
 A successful installation or permission prompt does NOT prove notification
 receipt, background reliability, encrypted transport, or compatibility with
 production donation alerts.

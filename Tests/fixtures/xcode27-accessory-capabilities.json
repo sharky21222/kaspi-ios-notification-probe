@@ -1,0 +1,30 @@
+{
+  "source": "Xcode 27.0 (27A266a), DVTPortalCachedPortalCapabilities.json",
+  "observed_on": "2026-10-21",
+  "data": [
+    {
+      "id": "ACCESSORY_DATA_PROVIDER",
+      "attributes": {
+        "enabledByDefault": false,
+        "validTeamTypes": ["APPLE_DEVELOPER_ENTERPRISE_PROGRAM", "APPLE_DEVELOPER_PROGRAM"],
+        "entitlements": [{"profileKey": "com.apple.developer.accessory-data-provider", "isRequiredInPlist": true}]
+      }
+    },
+    {
+      "id": "ACCESSORY_TRANSPORT_EXTENSION",
+      "attributes": {
+        "enabledByDefault": false,
+        "validTeamTypes": ["APPLE_DEVELOPER_ENTERPRISE_PROGRAM", "APPLE_DEVELOPER_PROGRAM"],
+        "entitlements": [{"profileKey": "com.apple.developer.accessory-transport-extension", "isRequiredInPlist": true}]
+      }
+    },
+    {
+      "id": "ACCESSORY_TRANSPORT_SECURITY",
+      "attributes": {
+        "enabledByDefault": false,
+        "validTeamTypes": ["APPLE_DEVELOPER_ENTERPRISE_PROGRAM", "APPLE_DEVELOPER_PROGRAM"],
+        "entitlements": [{"profileKey": "com.apple.developer.accessory-transport-security", "isRequiredInPlist": true}]
+      }
+    }
+  ]
+}

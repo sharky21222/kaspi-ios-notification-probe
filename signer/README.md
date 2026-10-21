@@ -5,6 +5,13 @@ It supports only the isolated Kaspi Access Probe. It is not integrated with
 KaspiDonate. Successful signing or installation does not prove that iOS grants
 notification access, nor that bank notifications or background delivery work.
 
+The 2026-10-21 Xcode 27 capability audit found that all three accessory rights
+list only Developer Program / Enterprise Program team types, not free Personal
+Team. The real-device run stopped at the missing profile entitlement. Do not
+repeat certificate revocation or assume paid membership guarantees this probe
+will receive notifications. See `docs/accessory-capability-findings.md` in the
+project repository for the audit evidence and remaining implementation limits.
+
 ## Commands (Windows PowerShell)
 
 For the read-only login check, double-click `Check-Account.cmd`. It leaves the
@@ -32,8 +39,10 @@ console open after completion. Nothing runs automatically when the ZIP is opened
 
 Keep exactly one unlocked iPhone connected by USB, with the existing Apple device
 drivers. Approve trust or developer-mode prompts yourself. No administrator
-rights, OS security changes, paid services or cloud Apple credentials are needed
-by this tool. Capability eligibility for a free Personal Team is unconfirmed.
+rights, OS security changes, or cloud Apple credentials are needed by this local
+tool. The tool itself is free; this does not make restricted Apple capabilities
+available to Personal Team. Xcode 27 lists only Developer Program / Enterprise
+Program for these three rights; a working notification bridge remains unverified.
 
 Apple ID password and 2FA code are entered only in the local hidden console
 prompts, never as command-line arguments, in chat, in CI, or in build variables.

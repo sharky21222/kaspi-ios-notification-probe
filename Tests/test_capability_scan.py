@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import unittest
 from pathlib import Path
 
@@ -9,6 +10,18 @@ SPEC.loader.exec_module(SCAN)
 
 
 class CapabilityScanTests(unittest.TestCase):
+    def test_xcode27_snapshot_retains_supported_team_and_profile_requirements(self):
+        path = Path(__file__).parent / "fixtures/xcode27-accessory-capabilities.json"
+        snapshot = json.loads(path.read_text(encoding="utf-8"))
+        records = list(SCAN.matching_records(snapshot))
+        self.assertEqual(len(records), 3)
+        for record in records:
+            attributes = record["definition"]["attributes"]
+            self.assertEqual(set(attributes["validTeamTypes"]), {
+                "APPLE_DEVELOPER_PROGRAM", "APPLE_DEVELOPER_ENTERPRISE_PROGRAM"})
+            self.assertTrue(attributes["entitlements"][0]["isRequiredInPlist"])
+            self.assertFalse(attributes["enabledByDefault"])
+
     def test_keeps_capability_identifier_and_eligibility_conditions(self):
         capability = {"id": "EXAMPLE_ACCESSORY", "type": "capabilities", "attributes": {
             "supportedSDKs": ["ios"], "entitlements": [
