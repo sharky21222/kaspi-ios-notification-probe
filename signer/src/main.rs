@@ -76,7 +76,7 @@ fn inspect(path: &Path) -> Result<(), Report> {
                 "directory":"Extensions", "required_entitlement":required_accessory_entitlement(&extension.app_info)})
         }).collect();
     println!("{}", serde_json::json!({"bundle_id":PROBE_ID,"extensions":extensions,
-            "extension_count":extensions.len(),"network_used":false,"apple_profile_granted":false,
+            "extension_count":extensions.len(),"network_used":false,"apple_profile_checked":false,
             "bank_notifications_verified":false}));
     Ok(())
 }
@@ -132,7 +132,7 @@ async fn account_check() -> Result<(), Report> {
 
 async fn install_probe(path: PathBuf) -> Result<(), Report> {
     require_local_interaction()?;
-    let digest = format!("{:x}", Sha256::digest(std::fs::read(&path)?));
+    let digest = hex::encode(Sha256::digest(std::fs::read(&path)?).as_slice());
     if digest != SOURCE_SHA256 { bail!("Input does not match the verified, isolated Access Probe build."); }
     inspect(&path)?;
     println!("TEST ONLY. May register four App IDs, a device, profiles and one NEW development certificate.");
