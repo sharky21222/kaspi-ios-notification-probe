@@ -7,6 +7,9 @@ notification access, nor that bank notifications or background delivery work.
 
 ## Commands (Windows PowerShell)
 
+For the read-only login check, double-click `Check-Account.cmd`. It leaves the
+console open after completion. Nothing runs automatically when the ZIP is opened.
+
 ```powershell
 .\kaspi-probe-signer.exe inspect "$HOME\Downloads\Kaspi-Access-Probe.ipa"
 .\kaspi-probe-signer.exe check-account

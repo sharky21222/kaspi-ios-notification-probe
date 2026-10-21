@@ -28,6 +28,7 @@ def main():
     with zipfile.ZipFile(OUTPUT / "Kaspi-Probe-Signer-Windows.zip", "w", zipfile.ZIP_DEFLATED) as archive:
         archive.write(EXE, "kaspi-probe-signer.exe")
         archive.write(ROOT / "signer/README.md", "README.md")
+        archive.write(ROOT / "signer/Check-Account.cmd", "Check-Account.cmd")
         archive.write(ROOT / "signer/THIRD_PARTY.md", "THIRD_PARTY.md")
         archive.write(ROOT / "signer/LICENSE", "LICENSE")
         archive.write(ROOT / "signer/vendor/isideload/LICENSE", "licenses/isideload-MIT.txt")
