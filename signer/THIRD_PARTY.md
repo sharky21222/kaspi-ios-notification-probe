@@ -13,6 +13,7 @@ Local modifications, 2026-10-21:
 - Discover `Extensions/*.appex` as well as `PlugIns/*.appex`; preserve locations.
 - Reject malformed extension bundles instead of silently dropping them.
 - Give each temporary application extraction a new random name.
+- Skip unnecessary App Group registration for this specific isolated probe.
 - Check each accessory extension's separate Apple-issued profile for its
   required Boolean entitlement before signing anything.
 

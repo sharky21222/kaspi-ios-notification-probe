@@ -135,19 +135,25 @@ impl<C: MaxCertsCallback> Sideloader<C> {
             }
         );
 
-        let app_group = self
-            .dev_session
-            .ensure_app_group(&team, &main_app_name, &group_identifier, None)
-            .await?;
+        // This isolated probe has no App Groups entitlement or shared container.
+        let app_group = if main_bundle_id == "site.shrks.kaspiprobe.access" {
+            None
+        } else {
+            Some(self.dev_session
+                .ensure_app_group(&team, &main_app_name, &group_identifier, None)
+                .await?)
+        };
 
         for app_id in app_ids.iter_mut() {
-            app_id
-                .ensure_group_feature(&mut self.dev_session, &team)
-                .await?;
+            if let Some(app_group) = &app_group {
+                app_id
+                    .ensure_group_feature(&mut self.dev_session, &team)
+                    .await?;
 
-            self.dev_session
-                .assign_app_group(&team, &app_group, app_id, None)
-                .await?;
+                self.dev_session
+                    .assign_app_group(&team, app_group, app_id, None)
+                    .await?;
+            }
 
             if increased_memory_limit {
                 self.dev_session

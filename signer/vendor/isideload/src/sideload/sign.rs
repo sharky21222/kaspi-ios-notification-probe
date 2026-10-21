@@ -5,6 +5,7 @@ use apple_codesign_quick::{
 };
 
 use plist::Dictionary;
+use rootcause::option_ext::OptionExt;
 use rootcause::prelude::*;
 use tracing::warn;
 
