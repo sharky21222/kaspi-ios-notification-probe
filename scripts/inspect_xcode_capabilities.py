@@ -35,16 +35,24 @@ def main():
     roots = [
         contents / "PlugIns",
         contents / "SharedFrameworks",
+        contents / "Frameworks",
         developer / "Platforms/iPhoneOS.platform",
         developer / "Library/Xcode/Specifications",
     ]
     matches = []
+    candidates = []
     seen = set()
     for root in roots:
         if not root.exists():
             continue
-        for path in root.rglob("*.plist"):
+        for path in root.rglob("*"):
             try:
+                if not path.is_file():
+                    continue
+                if any(word in path.name.lower() for word in ("capabilit", "entitlement")):
+                    candidates.append(str(path.relative_to(contents)))
+                if path.suffix not in (".plist", ".entitlements", ".json", ".xml", ".xcspec", ".xcplugindata"):
+                    continue
                 resolved = path.resolve()
                 if resolved in seen or path.stat().st_size > 16 * 1024 * 1024:
                     continue
@@ -52,7 +60,13 @@ def main():
                 raw = path.read_bytes()
                 if not any(needle.encode() in raw for needle in NEEDLES):
                     continue
-                records = list(matching_records(plistlib.loads(raw)))
+                try:
+                    value = json.loads(raw) if path.suffix == ".json" else plistlib.loads(raw)
+                    records = list(matching_records(value))
+                except (ValueError, plistlib.InvalidFileException):
+                    text = raw.decode("utf-8", errors="replace")
+                    records = [{"matching_lines": [line for line in text.splitlines()
+                        if any(needle in line for needle in NEEDLES)][:30]}]
                 if records:
                     matches.append({"file": str(path.relative_to(contents)), "records": records})
             except (OSError, ValueError, plistlib.InvalidFileException):
@@ -61,7 +75,8 @@ def main():
         "xcode": subprocess.check_output(["xcodebuild", "-version"], text=True).strip(),
         "account_accessed": False,
         "provisioning_profiles_read": False,
-        "scanned_public_plists": len(seen),
+        "scanned_public_metadata_files": len(seen),
+        "candidate_definition_files": sorted(set(candidates)),
         "matches": matches,
     }
     output = Path("output")
