@@ -1,4 +1,15 @@
 workflows:
+  xcode-capability-audit:
+    name: Read public Xcode accessory signing rules - no account
+    instance_type: mac_mini_m2
+    max_build_duration: 5
+    environment:
+      xcode: '27.0'
+    scripts:
+      - name: Inspect only public Xcode definitions
+        script: python3 scripts/inspect_xcode_capabilities.py
+    artifacts:
+      - output/xcode-accessory-capabilities.json
   probe-ios:
     name: Installation and capability probes
     instance_type: mac_mini_m2
