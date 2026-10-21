@@ -13,3 +13,25 @@ workflows:
       - output/manifest.json
       - output/install-probe.png
       - build-*.log
+  signer-windows:
+    name: Patched Windows probe signer - no Apple credentials
+    instance_type: mac_mini_m2
+    max_build_duration: 20
+    environment:
+      xcode: '27.0'
+      vars:
+        CI: 'true'
+    cache:
+      cache_paths:
+        - $HOME/.cargo/registry
+        - $HOME/.cache/kaspi-xwin
+        - $CM_BUILD_DIR/signer/target
+    scripts:
+      - name: Prepare Rust and run offline signer tests
+        script: bash scripts/build_signer.sh test
+      - name: Cross-compile and package the Windows signer
+        script: bash scripts/build_signer.sh windows
+    artifacts:
+      - output/Kaspi-Probe-Signer-Windows.zip
+      - output/signer-manifest.json
+      - build-signer-*.log

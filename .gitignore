@@ -11,3 +11,9 @@ __pycache__/
 *.p8
 *.cer
 *.ipa
+signer/target/
+signer/.state/
+!signer/vendor/isideload/src/assets/apple_root.cer
+!signer/vendor/isideload/src/assets/AppleWWDRCAG3.cer
+!signer/vendor/apple-codesign-quick/assets/AppleWWDRCAG3.cer
+!signer/vendor/apple-codesign-quick/assets/AppleIncRootCertificate.cer
